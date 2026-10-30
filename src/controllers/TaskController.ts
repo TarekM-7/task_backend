@@ -28,4 +28,20 @@ export class TaskController {
         }
         res.json({ data: task })
     }
+
+    static updateTask: RequestHandler = async (req, res) => {
+        const { taskName, description } = req.body
+        const { taskId } = req.params
+        const task = await Task.findById(taskId)
+        if (!task) {
+            return res.status(404).json({ errors: [{ msg: 'Task not found' }] })
+        }
+        if (task.project.toString() !== req.project._id.toString()) {
+            return res.status(400).json({ errors: [{ msg: 'Not a valid action' }] })
+        }
+        task.taskName = taskName
+        task.description = description
+        await task.save()
+        res.json({ data: task })
+    }
 }

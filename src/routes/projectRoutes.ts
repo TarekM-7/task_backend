@@ -53,4 +53,14 @@ router.get(
     TaskController.getTaskById
 )
 
+router.put(
+    '/:projectId/tasks/:taskId',
+    projectIdValidator,
+    taskIdValidator,
+    taskValidator,
+    handleInputErrors,
+    validateProjectExists,
+    TaskController.updateTask
+)
+
 export default router

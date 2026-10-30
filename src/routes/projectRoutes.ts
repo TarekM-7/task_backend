@@ -32,4 +32,11 @@ router.post(
     TaskController.createTask
 )
 
+router.get(
+    '/:id/tasks',
+    idProjectValidator,
+    handleInputErrors,
+    validateProjectExists,
+    TaskController.getProjectTasks
+)
 export default router

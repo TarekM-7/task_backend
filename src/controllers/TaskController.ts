@@ -11,4 +11,9 @@ export class TaskController {
             data: task
         })
     }
+
+    static getProjectTasks: RequestHandler = async (req, res) => {
+        const tasks = await Task.find({ project: req.project._id })
+        res.json({ data: tasks })
+    }
 }

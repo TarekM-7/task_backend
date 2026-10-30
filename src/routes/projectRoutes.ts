@@ -8,7 +8,7 @@ import {
 import { handleInputErrors } from '../middleware/validation'
 import { TaskController } from '../controllers/TaskController'
 import { validateProjectExists } from '../middleware/project'
-import { taskValidator } from '../validators/taskValidator'
+import { taskIdValidator, taskValidator } from '../validators/taskValidator'
 
 const router = Router()
 
@@ -47,6 +47,7 @@ router.get(
 router.get(
     '/:projectId/tasks/:taskId',
     projectIdValidator,
+    taskIdValidator,
     handleInputErrors,
     validateProjectExists,
     TaskController.getTaskById

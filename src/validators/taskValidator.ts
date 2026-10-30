@@ -1,4 +1,4 @@
-import { body } from 'express-validator'
+import { body, param } from 'express-validator'
 
 export const taskValidator = [
     body('taskName')
@@ -22,3 +22,5 @@ export const taskValidator = [
         .notEmpty()
         .withMessage('Description cannot be empty')
 ]
+
+export const taskIdValidator = [param('taskId').isMongoId().withMessage('Invalid Task ID')]

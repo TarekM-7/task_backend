@@ -4,6 +4,7 @@ import { idProjectValidator, projectValidator } from '../validators/projectValid
 import { handleInputErrors } from '../middleware/validation'
 import { TaskController } from '../controllers/TaskController'
 import { validateProjectExists } from '../middleware/project'
+import { taskValidator } from '../validators/taskValidator'
 
 const router = Router()
 
@@ -25,6 +26,7 @@ router.delete('/:id', idProjectValidator, handleInputErrors, ProjectController.d
 router.post(
     '/:id/tasks',
     idProjectValidator,
+    taskValidator,
     handleInputErrors,
     validateProjectExists,
     TaskController.createTask

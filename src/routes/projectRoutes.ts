@@ -1,6 +1,10 @@
 import { Router } from 'express'
 import { ProjectController } from '../controllers/ProjectController'
-import { idProjectValidator, projectValidator } from '../validators/projectValidator'
+import {
+    idProjectValidator,
+    projectIdValidator,
+    projectValidator
+} from '../validators/projectValidator'
 import { handleInputErrors } from '../middleware/validation'
 import { TaskController } from '../controllers/TaskController'
 import { validateProjectExists } from '../middleware/project'
@@ -24,8 +28,8 @@ router.put(
 router.delete('/:id', idProjectValidator, handleInputErrors, ProjectController.deleteProject)
 
 router.post(
-    '/:id/tasks',
-    idProjectValidator,
+    '/:projectId/tasks',
+    projectIdValidator,
     taskValidator,
     handleInputErrors,
     validateProjectExists,
@@ -33,10 +37,19 @@ router.post(
 )
 
 router.get(
-    '/:id/tasks',
-    idProjectValidator,
+    '/:projectId/tasks',
+    projectIdValidator,
     handleInputErrors,
     validateProjectExists,
     TaskController.getProjectTasks
 )
+
+router.get(
+    '/:projectId/tasks/:taskId',
+    projectIdValidator,
+    handleInputErrors,
+    validateProjectExists,
+    TaskController.getTaskById
+)
+
 export default router

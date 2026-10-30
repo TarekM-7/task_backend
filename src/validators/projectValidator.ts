@@ -33,4 +33,6 @@ export const projectValidator = [
         .withMessage('Description cannot be empty')
 ]
 
-export const idProjectValidator = [param('id').isMongoId().withMessage('Invalid ID')]
+export const idProjectValidator = [param('id').isMongoId().withMessage('Invalid Project ID')]
+
+export const projectIdValidator = [param('projectId').isMongoId().withMessage('Invalid Project ID')]

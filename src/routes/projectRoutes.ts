@@ -63,4 +63,13 @@ router.put(
     TaskController.updateTask
 )
 
+router.delete(
+    '/:projectId/tasks/:taskId',
+    projectIdValidator,
+    taskIdValidator,
+    handleInputErrors,
+    validateProjectExists,
+    TaskController.deleteTask
+)
+
 export default router

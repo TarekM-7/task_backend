@@ -44,4 +44,20 @@ export class TaskController {
         await task.save()
         res.json({ data: task })
     }
+
+    static deleteTask: RequestHandler = async (req, res) => {
+        const { taskId } = req.params
+        const task = await Task.findById(taskId)
+        if (!task) {
+            return res.status(404).json({ errors: [{ msg: 'Task not found' }] })
+        }
+        if (task.project.toString() !== req.project._id.toString()) {
+            return res.status(400).json({ errors: [{ msg: 'Not a valid action' }] })
+        }
+        req.project.tasks = req.project.tasks.filter((id) => id?.toString() !== task._id.toString())
+
+        await task.deleteOne()
+        await req.project.save()
+        res.status(204).end()
+    }
 }

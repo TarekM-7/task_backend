@@ -18,46 +18,44 @@ export class TaskController {
     }
 
     static getTaskById: RequestHandler = async (req, res) => {
-        const { taskId } = req.params
-        const task = await Task.findById(taskId)
-        if (!task) {
-            return res.status(404).json({ errors: [{ msg: 'Task not found' }] })
-        }
-        if (task.project.toString() !== req.project._id.toString()) {
+        if (req.task.project.toString() !== req.project._id.toString()) {
             return res.status(400).json({ errors: [{ msg: 'Not a valid action' }] })
         }
-        res.json({ data: task })
+        res.json({ data: req.task })
     }
 
     static updateTask: RequestHandler = async (req, res) => {
         const { taskName, description } = req.body
-        const { taskId } = req.params
-        const task = await Task.findById(taskId)
-        if (!task) {
-            return res.status(404).json({ errors: [{ msg: 'Task not found' }] })
-        }
-        if (task.project.toString() !== req.project._id.toString()) {
+        if (req.task.project.toString() !== req.project._id.toString()) {
             return res.status(400).json({ errors: [{ msg: 'Not a valid action' }] })
         }
-        task.taskName = taskName
-        task.description = description
-        await task.save()
-        res.json({ data: task })
+        req.task.taskName = taskName
+        req.task.description = description
+        await req.task.save()
+        res.json({ data: req.task })
     }
 
     static deleteTask: RequestHandler = async (req, res) => {
-        const { taskId } = req.params
-        const task = await Task.findById(taskId)
-        if (!task) {
-            return res.status(404).json({ errors: [{ msg: 'Task not found' }] })
-        }
-        if (task.project.toString() !== req.project._id.toString()) {
+        if (req.task.project.toString() !== req.project._id.toString()) {
             return res.status(400).json({ errors: [{ msg: 'Not a valid action' }] })
         }
-        req.project.tasks = req.project.tasks.filter((id) => id?.toString() !== task._id.toString())
+        req.project.tasks = req.project.tasks.filter(
+            (id) => id?.toString() !== req.task._id.toString()
+        )
 
-        await task.deleteOne()
+        await req.task.deleteOne()
         await req.project.save()
         res.status(204).end()
+    }
+
+    static updateStatus: RequestHandler = async (req, res) => {
+        if (req.task.project.toString() !== req.project._id.toString()) {
+            return res.status(400).json({ errors: [{ msg: 'Not a valid action' }] })
+        }
+        const { status } = req.body
+        req.task.status = status
+
+        await req.task.save()
+        res.json({ data: req.task })
     }
 }

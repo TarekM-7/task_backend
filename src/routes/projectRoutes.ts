@@ -7,8 +7,9 @@ import {
 } from '../validators/projectValidator'
 import { handleInputErrors } from '../middleware/validation'
 import { TaskController } from '../controllers/TaskController'
-import { validateProjectExists } from '../middleware/project'
-import { taskIdValidator, taskValidator } from '../validators/taskValidator'
+import { projectExists } from '../middleware/project'
+import { taskIdValidator, taskStatusValidator, taskValidator } from '../validators/taskValidator'
+import { taskExists } from '../middleware/task'
 
 const router = Router()
 
@@ -32,7 +33,7 @@ router.post(
     projectIdValidator,
     taskValidator,
     handleInputErrors,
-    validateProjectExists,
+    projectExists,
     TaskController.createTask
 )
 
@@ -40,7 +41,7 @@ router.get(
     '/:projectId/tasks',
     projectIdValidator,
     handleInputErrors,
-    validateProjectExists,
+    projectExists,
     TaskController.getProjectTasks
 )
 
@@ -49,7 +50,8 @@ router.get(
     projectIdValidator,
     taskIdValidator,
     handleInputErrors,
-    validateProjectExists,
+    projectExists,
+    taskExists,
     TaskController.getTaskById
 )
 
@@ -59,7 +61,8 @@ router.put(
     taskIdValidator,
     taskValidator,
     handleInputErrors,
-    validateProjectExists,
+    projectExists,
+    taskExists,
     TaskController.updateTask
 )
 
@@ -68,8 +71,20 @@ router.delete(
     projectIdValidator,
     taskIdValidator,
     handleInputErrors,
-    validateProjectExists,
+    projectExists,
+    taskExists,
     TaskController.deleteTask
+)
+
+router.post(
+    '/:projectId/tasks/:taskId/status',
+    projectIdValidator,
+    taskIdValidator,
+    taskStatusValidator,
+    handleInputErrors,
+    projectExists,
+    taskExists,
+    TaskController.updateStatus
 )
 
 export default router

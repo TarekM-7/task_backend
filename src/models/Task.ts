@@ -1,6 +1,6 @@
 import mongoose, { Schema, Document, Types } from 'mongoose'
 
-const taskStatus = {
+export const taskStatus = {
     PENDING: 'pending',
     ON_HOLD: 'onHold',
     INPROGRESS: 'inProgress',

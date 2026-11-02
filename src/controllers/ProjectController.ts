@@ -29,19 +29,15 @@ export class ProjectController {
     static updateProject: RequestHandler = async (req, res) => {
         const { id } = req.params
         const { projectName, clientName, description } = req.body
-        const project = await Project.findByIdAndUpdate(
-            id,
-            {
-                projectName,
-                clientName,
-                description
-            },
-            { returnDocument: 'after' }
-        )
+        const project = await Project.findById(id)
         if (!project) {
             return res.status(404).json({ errors: [{ msg: 'Project not found' }] })
         }
 
+        project.projectName = projectName
+        project.clientName = clientName
+        project.description = description
+        await project.save()
         res.json({ data: project })
     }
 

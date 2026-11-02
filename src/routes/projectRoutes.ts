@@ -9,7 +9,7 @@ import { handleInputErrors } from '../middleware/validation'
 import { TaskController } from '../controllers/TaskController'
 import { projectExists } from '../middleware/project'
 import { taskIdValidator, taskStatusValidator, taskValidator } from '../validators/taskValidator'
-import { taskExists } from '../middleware/task'
+import { taskBelongsToProject, taskExists } from '../middleware/task'
 
 const router = Router()
 
@@ -52,6 +52,7 @@ router.get(
     handleInputErrors,
     projectExists,
     taskExists,
+    taskBelongsToProject,
     TaskController.getTaskById
 )
 
@@ -63,6 +64,7 @@ router.put(
     handleInputErrors,
     projectExists,
     taskExists,
+    taskBelongsToProject,
     TaskController.updateTask
 )
 
@@ -73,6 +75,7 @@ router.delete(
     handleInputErrors,
     projectExists,
     taskExists,
+    taskBelongsToProject,
     TaskController.deleteTask
 )
 
@@ -84,6 +87,7 @@ router.post(
     handleInputErrors,
     projectExists,
     taskExists,
+    taskBelongsToProject,
     TaskController.updateStatus
 )
 

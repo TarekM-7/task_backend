@@ -10,3 +10,10 @@ export const taskExists: RequestHandler = async (req, res, next) => {
     req.task = task
     next()
 }
+
+export const taskBelongsToProject: RequestHandler = (req, res, next) => {
+    if (req.task.project.toString() !== req.project._id.toString()) {
+        return res.status(400).json({ errors: [{ msg: 'Not a valid action' }] })
+    }
+    next()
+}

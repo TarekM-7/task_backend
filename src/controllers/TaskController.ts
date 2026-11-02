@@ -17,18 +17,12 @@ export class TaskController {
         res.json({ data: tasks })
     }
 
-    static getTaskById: RequestHandler = async (req, res) => {
-        if (req.task.project.toString() !== req.project._id.toString()) {
-            return res.status(400).json({ errors: [{ msg: 'Not a valid action' }] })
-        }
+    static getTaskById: RequestHandler = (req, res) => {
         res.json({ data: req.task })
     }
 
     static updateTask: RequestHandler = async (req, res) => {
         const { taskName, description } = req.body
-        if (req.task.project.toString() !== req.project._id.toString()) {
-            return res.status(400).json({ errors: [{ msg: 'Not a valid action' }] })
-        }
         req.task.taskName = taskName
         req.task.description = description
         await req.task.save()
@@ -36,9 +30,6 @@ export class TaskController {
     }
 
     static deleteTask: RequestHandler = async (req, res) => {
-        if (req.task.project.toString() !== req.project._id.toString()) {
-            return res.status(400).json({ errors: [{ msg: 'Not a valid action' }] })
-        }
         req.project.tasks = req.project.tasks.filter(
             (id) => id?.toString() !== req.task._id.toString()
         )
@@ -49,9 +40,6 @@ export class TaskController {
     }
 
     static updateStatus: RequestHandler = async (req, res) => {
-        if (req.task.project.toString() !== req.project._id.toString()) {
-            return res.status(400).json({ errors: [{ msg: 'Not a valid action' }] })
-        }
         const { status } = req.body
         req.task.status = status
 

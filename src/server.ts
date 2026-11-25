@@ -3,6 +3,7 @@ import cors from 'cors'
 import morgan from 'morgan'
 import { corsConfig } from './config/cors'
 import projectRoutes from './routes/projectRoutes'
+import authRoutes from './routes/authRoutes'
 import { handleErrors, notFound } from './middleware/errors'
 
 const server = express()
@@ -13,6 +14,7 @@ server.use(morgan('dev'))
 
 server.use(express.json())
 
+server.use('/api/auth', authRoutes)
 server.use('/api/projects', projectRoutes)
 
 server.use(notFound)

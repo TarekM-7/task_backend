@@ -3,6 +3,7 @@ import User from '../models/User'
 import { hashPassword } from '../utils/auth'
 import { generateToken } from '../utils/token'
 import Token from '../models/Token'
+import { transporter } from '../config/nodemailer'
 
 export class AuthController {
     static createAccount: RequestHandler = async (req, res) => {
@@ -21,6 +22,14 @@ export class AuthController {
         token.user = user._id
 
         await Promise.all([user.save(), token.save()])
+
+        await transporter.sendMail({
+            from: 'UpTask <admin@uptask.com>',
+            to: user.email,
+            subject: 'UpTask - Confirma tu cuenta',
+            text: 'UpTask - Confirma tu cuenta',
+            html: '<p>Probando Email</p>'
+        })
 
         res.status(201).json({ message: 'Account created, check your email to confirm it' })
     }

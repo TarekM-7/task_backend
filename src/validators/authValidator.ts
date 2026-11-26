@@ -43,3 +43,19 @@ export const authValidator = [
         .isEmail()
         .withMessage('Email is not valid')
 ]
+
+export const tokenValidator = [
+    body('token')
+        .exists()
+        .withMessage('Token is required')
+        .bail()
+        .isString()
+        .withMessage('Token must be a string')
+        .bail()
+        .trim()
+        .isLength({ min: 6, max: 6 })
+        .withMessage('Token must have 6 digits')
+        .bail()
+        .isNumeric()
+        .withMessage('Token must have 6 digits')
+]

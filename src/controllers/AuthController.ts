@@ -24,7 +24,9 @@ export class AuthController {
         await Promise.all([user.save(), token.save()])
 
         await AuthEmail.sendConfirmationEmail({
-            email: user.email
+            email: user.email,
+            name: user.name,
+            token: token.token
         })
 
         res.status(201).json({ message: 'Account created, check your email to confirm it' })

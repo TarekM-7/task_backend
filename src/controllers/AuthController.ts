@@ -1,6 +1,6 @@
 import { RequestHandler } from 'express'
 import User from '../models/User'
-import { hashPassword } from '../utils/auth'
+import { checkPassword, hashPassword } from '../utils/auth'
 import { generateToken } from '../utils/token'
 import Token from '../models/Token'
 import { AuthEmail } from '../emails/AuthEmail'
@@ -51,5 +51,37 @@ export class AuthController {
         await Promise.all([user.save(), tokenExists.deleteOne()])
 
         res.json({ message: 'Account confirmed successfully' })
+    }
+
+    static login: RequestHandler = async (req, res) => {
+        const { email, password } = req.body
+        const user = await User.findOne({ email })
+        if (!user) {
+            return res.status(404).json({ errors: [{ msg: 'User not found' }] })
+        }
+
+        if (!user.confirmed) {
+            const token = new Token()
+            token.user = user._id
+            token.token = generateToken()
+            await token.save()
+
+            await AuthEmail.sendConfirmationEmail({
+                email: user.email,
+                name: user.name,
+                token: token.token
+            })
+
+            return res
+                .status(401)
+                .json({ errors: [{ msg: 'User not confirmed, check your email to confirm it' }] })
+        }
+
+        const isPasswordCorrect = await checkPassword(password, user.password)
+        if (!isPasswordCorrect) {
+            return res.status(401).json({ errors: [{ msg: 'Incorrect password' }] })
+        }
+
+        res.json({ message: 'Authenticated' })
     }
 }

@@ -59,3 +59,28 @@ export const tokenValidator = [
         .isNumeric()
         .withMessage('Token must have 6 digits')
 ]
+
+export const loginValidator = [
+    body('email')
+        .exists()
+        .withMessage('Email is required')
+        .bail()
+        .isString()
+        .withMessage('Email must be a string')
+        .bail()
+        .trim()
+        .notEmpty()
+        .withMessage('Email cannot be empty')
+        .bail()
+        .isEmail()
+        .withMessage('Email is not valid'),
+    body('password')
+        .exists()
+        .withMessage('Password is required')
+        .bail()
+        .isString()
+        .withMessage('Password must be a string')
+        .bail()
+        .notEmpty()
+        .withMessage('Password cannot be empty')
+]

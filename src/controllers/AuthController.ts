@@ -84,4 +84,31 @@ export class AuthController {
 
         res.json({ message: 'Authenticated' })
     }
+
+    static requestConfirmationCode: RequestHandler = async (req, res) => {
+        const { email } = req.body
+
+        const user = await User.findOne({ email })
+        if (!user) {
+            return res.status(404).json({ errors: [{ msg: 'User is not registered' }] })
+        }
+
+        if (user.confirmed) {
+            return res.status(403).json({ errors: [{ msg: 'User is already confirmed' }] })
+        }
+
+        const token = new Token()
+        token.token = generateToken()
+        token.user = user._id
+
+        await token.save()
+
+        await AuthEmail.sendConfirmationEmail({
+            email: user.email,
+            name: user.name,
+            token: token.token
+        })
+
+        res.json({ message: 'A new token has been sent to your email' })
+    }
 }

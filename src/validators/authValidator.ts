@@ -60,7 +60,7 @@ export const tokenValidator = [
         .withMessage('Token must have 6 digits')
 ]
 
-export const loginValidator = [
+export const emailValidator = [
     body('email')
         .exists()
         .withMessage('Email is required')
@@ -73,7 +73,11 @@ export const loginValidator = [
         .withMessage('Email cannot be empty')
         .bail()
         .isEmail()
-        .withMessage('Email is not valid'),
+        .withMessage('Email is not valid')
+]
+
+export const loginValidator = [
+    ...emailValidator,
     body('password')
         .exists()
         .withMessage('Password is required')
